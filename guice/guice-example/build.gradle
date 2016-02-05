@@ -1,0 +1,45 @@
+group 'com.junjaytan.java'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'eclipse'
+apply plugin: 'application'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+// main class of app (requires application plugin)
+mainClassName = 'example.xml.Main'
+version = '0.0.1'
+
+jar {
+    manifest {
+        attributes "Implementation-Title": "Guice XML example"
+        attributes "Implementation-Version": version
+        attributes "Main-Class" : mainClassName
+    }
+    // remove the security files (from mail.jar / activation.jar) so that the jar will be executable.
+    doFirst {
+        from (configurations.runtime.resolve().collect { it.isDirectory() ? it : zipTree(it) }) {
+            exclude 'META-INF/MANIFEST.MF'
+            exclude 'META-INF/*.SF'
+            exclude 'META-INF/*.DSA'
+            exclude 'META-INF/*.RSA'
+        }
+    }
+}
+
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // safesax isn't on mavencentral, so including it locally
+    compile files('libs/safesax.jar')
+    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.5'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.5'
+    compile group: 'com.google.inject', name: 'guice', version: '4.0'
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}
