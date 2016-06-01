@@ -1,0 +1,1 @@
+A simple spring batch app that reads a csv and prints out to console as it transforms names to uppercase
